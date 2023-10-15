@@ -10,6 +10,7 @@ namespace Data
         [SerializeField] private float _number;
         [SerializeField] private string _name;
         [SerializeField] private Sprite _missionImage;
+        [SerializeField] private Vector2 _mapPosition;
         [TextArea(4,10)][SerializeField] private string _preText;
         [TextArea(6,10)][SerializeField] private string _text;
         [SerializeField] private List<CharactersTypes.Type> _allyType = new List<CharactersTypes.Type>();
@@ -22,6 +23,7 @@ namespace Data
         public float Number => _number;
         public string Name => _name;
         public Sprite MissionImage => _missionImage;
+        public Vector2 MapPosition => _mapPosition;
         public string PreText => _preText;
         public string Text => _text;
         public List<CharactersTypes.Type> AllyType => _allyType;

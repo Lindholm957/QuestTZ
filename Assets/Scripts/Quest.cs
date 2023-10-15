@@ -1,21 +1,21 @@
 namespace DefaultNamespace
 {
-    public enum Type
-    {
-        Single,
-        Double
-    }
-
-    public enum State
-    {
-        Active,
-        Disabled,
-        TemporarilyDisabled,
-        Completed
-    }
-    
     public class Quest
     {
+        public enum Type
+        {
+            Single,
+            Double
+        }
+
+        public enum State
+        {
+            Active,
+            Disabled,
+            TemporarilyDisabled,
+            Completed
+        }
+        
         private Type _type;
         private State _state;
         private string _name;
