@@ -6,6 +6,8 @@ namespace Data
         {
             None,
             Hawk,
+            Eagle,
+            Jackdaw,
             Gull,
             Jay,
             Sparrow,
