@@ -3,51 +3,53 @@ using Data;
 using DefaultNamespace;
 using UI;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class QuestsUiManager : MonoBehaviour
 {
-    [SerializeField] private LevelData _levelData;
+    [HideInInspector] [SerializeField] private UnityEvent<int> _questSelected = new UnityEvent<int>();
     [SerializeField] private Transform _mapRoot;
-    [SerializeField] private List<QuestWrapper> _startQuests = new List<QuestWrapper>();
     [SerializeField] private GameObject _questButtonPrefab;
+    [SerializeField] private Transform _questParent;
+    [SerializeField] private GameObject _questPreviewPrefab;
+    [SerializeField] private GameObject _doubleQuestPreviewPrefab;
 
-    private Dictionary<int, QuestWrapper> _questWrappersDict;
-    private List<QuestButton> _questButtons;
-    private QuestWrapper _curQuestWrapper;
-    private void Awake()
+    private List<QuestButton> _questButtons = new List<QuestButton>();
+    private QuestWrapper _curOpenedQuest;
+
+    public UnityEvent<int> QuestSelected => _questSelected;
+    public void InitButton(int id, Vector2 mapPosition)
     {
-        _questWrappersDict = new Dictionary<int, QuestWrapper>();
-        for(int i = 0; i < _levelData.QuestWrapperList.Count; i++)
-        {
-            _questWrappersDict.Add(i, _levelData.QuestWrapperList[i]);
-        }
+        var button = Instantiate(_questButtonPrefab, _mapRoot);
+        button.GetComponent<Transform>().localPosition = mapPosition;
         
-        _questButtons = new List<QuestButton>();
-        for(int i = 0; i < _startQuests.Count; i++)
-        {
-            var button = Instantiate(_questButtonPrefab, _mapRoot);
-            button.GetComponent<Transform>().localPosition = _startQuests[i].MapPosition;
-            var questButton = button.GetComponent<QuestButton>();
-            questButton.Init(_startQuests[i].Id);
-            _questButtons.Add(questButton);
-        }
-    }
-
-    private void OnEnable()
-    {
-        foreach (var btn in _questButtons)
-        {
-            btn.ButtonClicked.AddListener(OnQuestBtnClicked);
-        }
+        var questButton = button.GetComponent<QuestButton>();
+        questButton.Init(id);
+        
+        _questButtons.Add(questButton);
+        _questButtons[_questButtons.Count-1].ButtonClicked.AddListener(OnQuestBtnClicked);
     }
 
     private void OnQuestBtnClicked(int id)
     {
-        Debug.Log("TEST");
-        _curQuestWrapper = _questWrappersDict[id];
+        _questSelected.Invoke(id);
+    }
+
+    public void CreateQuestPreviewWindow(QuestWrapper questWrapper) 
+    {
+        _curOpenedQuest = questWrapper;
+        if (_curOpenedQuest.IsDoubleQuest)
+        {
+            var window = Instantiate(_doubleQuestPreviewPrefab, _questParent);
+        }
+        else
+        {
+            var window = Instantiate(_questPreviewPrefab, _questParent);
+            window.GetComponent<QuestPreviewUI>().Init(_curOpenedQuest.Id, _curOpenedQuest.FirstQuest);
+        }
     }
     
-    private void OnDestroy()
+    private void OnDisable()
     {
         foreach (var btn in _questButtons)
         {
