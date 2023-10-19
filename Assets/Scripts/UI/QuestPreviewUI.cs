@@ -11,7 +11,6 @@ namespace UI
         [SerializeField] private TMP_Text _title;
         [SerializeField] private Image _image;
         [SerializeField] private TMP_Text _preText;
-        [SerializeField] private Button _startButton;
 
         private int _id;
 
@@ -21,6 +20,11 @@ namespace UI
             _title.text = questData.name;
             _image.sprite = questData.MissionImage;
             _preText.text = questData.Text;
+        }
+
+        public void OnClick()
+        {
+            
         }
     }
 }

@@ -131,6 +131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5052252041164560882}
+  - component: {fileID: 6995257969790148}
   m_Layer: 5
   m_Name: DoubleQuestPreview
   m_TagString: Untagged
@@ -160,6 +161,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &6995257969790148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2193316486201409946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 613226ad009c4f6f92ecf497f73aa76f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _firstQuest: {fileID: 2815082869110506989}
+  _alternativeQuest: {fileID: 8665370163900100093}
 --- !u!1 &2629503700370643370
 GameObject:
   m_ObjectHideFlags: 0

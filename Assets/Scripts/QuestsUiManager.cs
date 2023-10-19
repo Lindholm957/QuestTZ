@@ -40,7 +40,9 @@ public class QuestsUiManager : MonoBehaviour
         _curOpenedQuest = questWrapper;
         if (_curOpenedQuest.IsDoubleQuest)
         {
-            var window = Instantiate(_doubleQuestPreviewPrefab, _questParent);
+            var window = Instantiate(_doubleQuestPreviewPrefab, _questParent).GetComponent<DoubleQuestPreviewUI>();
+            window.FirstQuest.Init(_curOpenedQuest.Id, _curOpenedQuest.FirstQuest);
+            window.AlternativeQuest.Init(_curOpenedQuest.Id, _curOpenedQuest.AlternativeQuest);
         }
         else
         {

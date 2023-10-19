@@ -20,7 +20,7 @@ namespace Data
         public int Id => _id;
         public bool IsDoubleQuest => _firstQuest != null & _alternativeQuest != null;
         public QuestData FirstQuest => _firstQuest;
-        public QuestData SecondQuest => _alternativeQuest;
+        public QuestData AlternativeQuest => _alternativeQuest;
         public Vector2 MapPosition => _mapPosition;
         public List<QuestWrapper> NextEnableQuests => _nextEnableQuests;
         public List<QuestWrapper> NextEnableAltQuests => _nextEnableAltQuests;
