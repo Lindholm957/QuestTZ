@@ -34,11 +34,6 @@ public class Journal : MonoBehaviour
         {
             _uiManager.InitButton(_startQuests[i].Id, _startQuests[i].MapPosition);
         }
-
-        // foreach (var kv in _questWrappersDict)
-        // {
-        //     Debug.Log(kv.Key + " - " + kv.Value.FirstQuest.Name);
-        // }
     }
 
     private void OnEnable()

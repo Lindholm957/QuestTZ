@@ -28,9 +28,9 @@ public class QuestsUiManager : MonoBehaviour
         
         var questButton = button.GetComponent<QuestButton>();
         questButton.Init(id);
-        
+
+        questButton.ButtonClicked.AddListener(OnQuestBtnClicked);
         _questButtons.Add(questButton);
-        _questButtons[_questButtons.Count-1].ButtonClicked.AddListener(OnQuestBtnClicked);
     }
 
     private void OnQuestBtnClicked(int id)
@@ -76,6 +76,13 @@ public class QuestsUiManager : MonoBehaviour
     private void OnQuestCompleted(int id, bool isAlternative)
     {
         RemoveAllWindows();
+        foreach (var qb in _questButtons)
+        {
+            if (qb.Id == id)
+            {
+                qb.DisableButton();
+            }
+        }
         _questCompleted.Invoke(id, isAlternative);
     }
 
