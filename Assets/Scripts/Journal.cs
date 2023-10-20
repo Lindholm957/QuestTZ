@@ -8,6 +8,7 @@ using UnityEngine;
 public class Journal : MonoBehaviour
 {
     [SerializeField] private LevelData _levelData;
+    [SerializeField] private HeroesSelector _heroesSelector;
     [SerializeField] private QuestsUiManager _uiManager;
     [SerializeField] private List<QuestWrapper> _startQuests = new List<QuestWrapper>();
 
@@ -50,13 +51,30 @@ public class Journal : MonoBehaviour
     private void OnQuestCompleted(int id, bool isAlternative)
     {
         List<QuestWrapper> newQuests = new List<QuestWrapper>();
+
         newQuests = isAlternative ? _questWrappersDict[id]?.NextEnableAltQuests : _questWrappersDict[id]?.NextEnableQuests;
         foreach (var qw in newQuests)
         {
             _uiManager.InitButton(qw.Id, qw.MapPosition);
         }
+        
+        var completedQD = isAlternative ? _questWrappersDict[id].AlternativeQuest :
+            _questWrappersDict[id].FirstQuest;
+        
+        UnlockHeroReward(completedQD);
+        
+        _heroesSelector.GiveRewardToHero(completedQD.HeroRewardValue,
+            completedQD.AdditionalRewardCharacters, completedQD.AdditionalRewardValue);
     }
-    
+
+    private void UnlockHeroReward(QuestData completedQD)
+    {
+        foreach (var unlockHeroType in completedQD.UnlockHero)
+        {
+            _heroesSelector.CreateNewHero(unlockHeroType);
+        }
+    }
+
     private void OnDisable()
     {
         _uiManager.QuestSelected.RemoveListener(OnQuestSelected);

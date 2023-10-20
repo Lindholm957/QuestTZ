@@ -15,7 +15,7 @@ public class HeroesSelector : MonoBehaviour
 
     private List<Hero> _heroesList = new List<Hero>();
 
-    public Hero CurHero => _toggleGroup.GetFirstActiveToggle().GetComponent<Hero>();
+    public Hero CurHero => _toggleGroup.GetFirstActiveToggle().gameObject.GetComponent<Hero>();
     public bool IsHeroSelected => CurHero != null;
 
     private void Awake()
@@ -25,8 +25,30 @@ public class HeroesSelector : MonoBehaviour
 
     public void CreateNewHero(CharactersTypes.HeroType type)
     {
+        foreach (var h in _heroesList)
+        {
+            if (h.Type == type)
+            {
+                return;
+            }
+        }
         var hero = Instantiate(_heroPrefab, _root).GetComponent<Hero>();
         hero.Init(_toggleGroup, type);
         _heroesList.Add(hero);
+    }
+    
+    public void GiveRewardToHero(double rewardValue,
+        List<CharactersTypes.HeroType> additionalHeroTypes, double additionalRewardValue)
+    {
+        foreach (var heroType in additionalHeroTypes)
+        {
+            if (CurHero.Type == heroType)
+            {
+                CurHero.ChangeExp(additionalRewardValue);
+                return;
+            }
+        }
+        
+        CurHero.ChangeExp(rewardValue);
     }
 }

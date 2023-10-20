@@ -405,6 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _levelData: {fileID: 11400000, guid: 27eb3c613d834457eb232990ac69faf0, type: 2}
+  _heroesSelector: {fileID: 1525119622}
   _uiManager: {fileID: 1817514006}
   _startQuests:
   - {fileID: 11400000, guid: 465f4d0c88a1b4b458118240f899e378, type: 2}
@@ -730,6 +731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _root: {fileID: 1525119616}
+  _defaultHeroType: 1
   _heroPrefab: {fileID: 1476652721341467709, guid: 5e35952d7c60f46d08d7a1dfc649aec7, type: 3}
   _toggleGroup: {fileID: 1525119621}
 --- !u!1 &1817514004

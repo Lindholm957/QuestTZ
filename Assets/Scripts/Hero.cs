@@ -14,7 +14,7 @@ public class Hero : MonoBehaviour
     [SerializeField] private TMP_Text _expField;
     
     private Toggle _toggle;
-    private int _exp;
+    private double _exp;
     private CharactersTypes.HeroType _type;
 
     public CharactersTypes.HeroType Type => _type;
@@ -24,10 +24,13 @@ public class Hero : MonoBehaviour
         _toggle = GetComponent<Toggle>();
         _toggle.group = group;
         _type = type;
+        _expField.text = _exp.ToString();
+        _nameField.text = CharactersTypes.GetHeroName(_type);
     }
 
-    public void OnToggleClicked(bool isClicked)
+    public void ChangeExp(double value)
     {
-        _toggle.isOn = !_toggle.isOn;
+        _exp += value;
+        _expField.text = _exp.ToString();
     }
 }
