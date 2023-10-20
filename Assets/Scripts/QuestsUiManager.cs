@@ -8,16 +8,19 @@ using UnityEngine.Events;
 public class QuestsUiManager : MonoBehaviour
 {
     [HideInInspector] [SerializeField] private UnityEvent<int> _questSelected = new UnityEvent<int>();
+    [HideInInspector] [SerializeField] private UnityEvent<int, bool> _questCompleted = new UnityEvent<int, bool>();
     [SerializeField] private Transform _mapRoot;
     [SerializeField] private GameObject _questButtonPrefab;
     [SerializeField] private Transform _questParent;
     [SerializeField] private GameObject _questPreviewPrefab;
     [SerializeField] private GameObject _doubleQuestPreviewPrefab;
+    [SerializeField] private GameObject _questPrefab;
 
     private List<QuestButton> _questButtons = new List<QuestButton>();
     private QuestWrapper _curOpenedQuest;
 
     public UnityEvent<int> QuestSelected => _questSelected;
+    public UnityEvent<int, bool> QuestCompleted => _questCompleted;
     public void InitButton(int id, Vector2 mapPosition)
     {
         var button = Instantiate(_questButtonPrefab, _mapRoot);
@@ -41,13 +44,46 @@ public class QuestsUiManager : MonoBehaviour
         if (_curOpenedQuest.IsDoubleQuest)
         {
             var window = Instantiate(_doubleQuestPreviewPrefab, _questParent).GetComponent<DoubleQuestPreviewUI>();
-            window.FirstQuest.Init(_curOpenedQuest.Id, _curOpenedQuest.FirstQuest);
-            window.AlternativeQuest.Init(_curOpenedQuest.Id, _curOpenedQuest.AlternativeQuest);
+            window.FirstQuest.Init(questWrapper.Id, _curOpenedQuest.FirstQuest, false);
+            window.AlternativeQuest.Init(questWrapper.Id, _curOpenedQuest.AlternativeQuest, true);
+            
+            window.FirstQuest.QuestStarted.AddListener(OnQuestStarted);
+            window.AlternativeQuest.QuestStarted.AddListener(OnQuestStarted);
         }
         else
         {
-            var window = Instantiate(_questPreviewPrefab, _questParent);
-            window.GetComponent<QuestPreviewUI>().Init(_curOpenedQuest.Id, _curOpenedQuest.FirstQuest);
+            var window = Instantiate(_questPreviewPrefab, _questParent).GetComponent<QuestPreviewUI>();
+            window.Init(questWrapper.Id, _curOpenedQuest.FirstQuest, false);
+            
+            window.QuestStarted.AddListener(OnQuestStarted);
+        }
+    }
+
+    private void OnQuestStarted(int id, bool isAlternative)
+    {
+        RemoveAllWindows();
+        CreateQuestWindow(id, isAlternative);
+    }
+
+    private void CreateQuestWindow(int id, bool isAlternative)
+    {
+        var quest = Instantiate(_questPrefab, _questParent).GetComponent<QuestUI>();
+        QuestData questData = isAlternative ? _curOpenedQuest.AlternativeQuest : _curOpenedQuest.FirstQuest;
+        quest.Init(id, questData, isAlternative);
+        quest.QuestCompleted.AddListener(OnQuestCompleted);
+    }
+
+    private void OnQuestCompleted(int id, bool isAlternative)
+    {
+        RemoveAllWindows();
+        _questCompleted.Invoke(id, isAlternative);
+    }
+
+    private void RemoveAllWindows()
+    {
+        foreach (Transform child in _questParent)
+        {
+            Destroy(child.gameObject);
         }
     }
     

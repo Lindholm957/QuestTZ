@@ -408,7 +408,6 @@ MonoBehaviour:
   _uiManager: {fileID: 1817514006}
   _startQuests:
   - {fileID: 11400000, guid: 465f4d0c88a1b4b458118240f899e378, type: 2}
-  - {fileID: 11400000, guid: aa436a831e17245f1b458f65cad6e472, type: 2}
 --- !u!4 &711192588
 Transform:
   m_ObjectHideFlags: 0
@@ -780,8 +779,12 @@ MonoBehaviour:
   _questSelected:
     m_PersistentCalls:
       m_Calls: []
+  _questCompleted:
+    m_PersistentCalls:
+      m_Calls: []
   _mapRoot: {fileID: 48592325}
   _questButtonPrefab: {fileID: 837236091509089901, guid: 939242df3cd444f0ba2129cc0a7d72bf, type: 3}
   _questParent: {fileID: 1407856845}
   _questPreviewPrefab: {fileID: 2183274181409080964, guid: 691b1aff076c8427db207c2f1ce66b8c, type: 3}
   _doubleQuestPreviewPrefab: {fileID: 2193316486201409946, guid: 5fb63fc5a086243d38b4dff2d9f9cd4f, type: 3}
+  _questPrefab: {fileID: 88334484302239208, guid: d0f7de8aa474d42d1926c2701581b9d6, type: 3}
