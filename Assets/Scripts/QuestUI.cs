@@ -12,9 +12,9 @@ namespace DefaultNamespace
         [SerializeField] private TMP_Text _title;
         [SerializeField] private Image _image;
 
-        [SerializeField] private TMP_Text _heroText;
+        [SerializeField] private TMP_Text _allyName;
         [SerializeField] private TMP_Text _questText;
-        [SerializeField] private TMP_Text _enemyText;
+        [SerializeField] private TMP_Text _enemyName;
         
         private int _id;
         private bool _isAlternative;
@@ -26,9 +26,9 @@ namespace DefaultNamespace
             _isAlternative = isAlternative;
             _title.text = questData.Name;
             _image.sprite = questData.MissionImage;
-            _heroText.text = questData.AllyType.ToString(); // здесь будет текст героя
+            _allyName.text += CharactersTypes.GetFractionNames(questData.AllyType);
             _questText.text = questData.Text;
-            _enemyText.text = questData.EnemyType.ToString(); // здесь будет текст врага
+            _enemyName.text += CharactersTypes.GetFractionNames(questData.EnemyType);
         }
 
         public void FinishQuest()

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 public class HeroesSelector : MonoBehaviour
 {
     [SerializeField] private Transform _root;
+    [SerializeField] private CharactersTypes.HeroType _defaultHeroType;
     [SerializeField] private GameObject _heroPrefab;
     [SerializeField] private ToggleGroup _toggleGroup;
 
@@ -18,8 +20,13 @@ public class HeroesSelector : MonoBehaviour
 
     private void Awake()
     {
+        CreateNewHero(_defaultHeroType);
+    }
+
+    public void CreateNewHero(CharactersTypes.HeroType type)
+    {
         var hero = Instantiate(_heroPrefab, _root).GetComponent<Hero>();
-        hero.Init(_toggleGroup);
+        hero.Init(_toggleGroup, type);
         _heroesList.Add(hero);
     }
 }

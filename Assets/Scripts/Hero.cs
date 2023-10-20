@@ -9,18 +9,21 @@ using UnityEngine.UI;
 
 public class Hero : MonoBehaviour
 {
-    [SerializeField] private CharactersTypes.Type _type;
     [SerializeField] private TMP_Text _nameField;
     [SerializeField] private Image _icon;
     [SerializeField] private TMP_Text _expField;
     
     private Toggle _toggle;
     private int _exp;
+    private CharactersTypes.HeroType _type;
 
-    public void Init(ToggleGroup group)
+    public CharactersTypes.HeroType Type => _type;
+
+    public void Init(ToggleGroup group, CharactersTypes.HeroType type)
     {
         _toggle = GetComponent<Toggle>();
         _toggle.group = group;
+        _type = type;
     }
 
     public void OnToggleClicked(bool isClicked)
