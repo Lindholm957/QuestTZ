@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Data;
 using DefaultNamespace;
 using UnityEngine;
@@ -12,17 +13,13 @@ public class Journal : MonoBehaviour
     [SerializeField] private QuestsUiManager _uiManager;
     [SerializeField] private List<QuestWrapper> _startQuests = new List<QuestWrapper>();
 
-    // private List<Quest> _activeQuests;
-    // private List<Quest> _completedQuests;
-    // private List<Quest> _disabledQuests;
+    private List<QuestWrapper> _completedQuests;
     
     private Dictionary<int, QuestWrapper> _questWrappersDict;
 
     private void Awake()
     {
-        // _activeQuests = new List<Quest>();
-        // _completedQuests = new List<Quest>();
-        // _disabledQuests = new List<Quest>();
+        _completedQuests = new List<QuestWrapper>();
         
         _questWrappersDict = new Dictionary<int, QuestWrapper>();
         for(int i = 0; i < _levelData.QuestWrapperList.Count; i++)
@@ -50,13 +47,7 @@ public class Journal : MonoBehaviour
     
     private void OnQuestCompleted(int id, bool isAlternative)
     {
-        List<QuestWrapper> newQuests = new List<QuestWrapper>();
-
-        newQuests = isAlternative ? _questWrappersDict[id]?.NextEnableAltQuests : _questWrappersDict[id]?.NextEnableQuests;
-        foreach (var qw in newQuests)
-        {
-            _uiManager.InitButton(qw.Id, qw.MapPosition);
-        }
+        OpenNewQuests(id, isAlternative);
         
         var completedQD = isAlternative ? _questWrappersDict[id].AlternativeQuest :
             _questWrappersDict[id].FirstQuest;
@@ -65,6 +56,34 @@ public class Journal : MonoBehaviour
         
         _heroesSelector.GiveRewardToHero(completedQD.HeroRewardValue,
             completedQD.AdditionalRewardCharacters, completedQD.AdditionalRewardValue);
+    }
+
+    private void OpenNewQuests(int id, bool isAlternative)
+    {
+        List<QuestWrapper> nextEnableQuests = new List<QuestWrapper>();
+        List<QuestWrapper> nextAvailableQuests = new List<QuestWrapper>();
+        _completedQuests.Add(_questWrappersDict[id]);
+
+        nextEnableQuests = isAlternative ? _questWrappersDict[id]?.NextEnableAltQuests : _questWrappersDict[id]?.NextEnableQuests;
+        foreach (var qw in nextEnableQuests)
+        {
+            nextAvailableQuests.Add(qw);
+        }
+        
+        foreach (var qw in nextEnableQuests)
+        {
+            foreach (var completedQuest in _completedQuests)
+            {
+                if (completedQuest == qw)
+                {
+                    nextAvailableQuests.Remove(qw);
+                }
+            }
+        }
+        foreach (var qw in nextAvailableQuests)
+        {
+            _uiManager.InitButton(qw.Id, qw.MapPosition);
+        }
     }
 
     private void UnlockHeroReward(QuestData completedQD)
